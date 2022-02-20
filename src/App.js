@@ -4,6 +4,7 @@ import PostList from "./components/PostList";
 import MyInput from "./components/UI/input/MyInput";
 import PostForm from "./components/PostForm";
 import MySelect from "./components/UI/select/MySelect";
+import PostFilter from "./components/PostFilter";
 
 
 function App() {
@@ -51,22 +52,7 @@ function App() {
         <div className="App">
             <PostForm create={createPost}/>
             <hr style={{margin: '20px'}}/>
-            <div>
-                <MyInput pleceholder="search"
-                         value={searchQwery}
-                         onChange={e => setSearchQwery(e.target.value)}
-                />
-
-                <MySelect
-                    value={selectedSort}
-                    onChange={sortPosts}
-                    defaultValue="Sort:"
-                    option={[
-                        {value: 'title', name: 'For name'},
-                        {value: 'body', name: 'For description'},
-                    ]}
-                />
-            </div>
+            <PostFilter />
             {
                 sortedAndSearchedPosts.length !== 0
                     ? <PostList remove={deletePost} posts={sortedAndSearchedPosts}/>
