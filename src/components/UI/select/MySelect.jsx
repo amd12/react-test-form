@@ -7,9 +7,6 @@ const MySelect = ({options,onChange,defaultValue}) => {
         onChange(e)
 
     }
-
-
-    console.log(options);
     return (
         <select onChange={event => changeSelect(event.target.value)} >
             <option  disabled>{defaultValue}</option>
