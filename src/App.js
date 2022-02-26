@@ -6,9 +6,6 @@ import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/myModal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 
-
-
-
 function App() {
 
     const [posts, setPosts] = useState([
@@ -19,8 +16,6 @@ function App() {
 
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
-
-
 
     const sortedPost = useMemo(() => {
         if (filter.sort) {
