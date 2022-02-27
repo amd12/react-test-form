@@ -23,7 +23,6 @@
 .remove-btn {
     margin-right: 0.5rem;
 }
-
 .post-enter {
     opacity: 0;
 }
@@ -39,3 +38,9 @@
     transition: opacity 500ms ease-in;
 }
 /**/
+
+.content{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
