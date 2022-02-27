@@ -8,6 +8,8 @@ import MyButton from "./components/UI/button/MyButton";
 import {usePosts} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/Loader/Loader";
+import {useFetching} from "./hooks/useFetching";
+import {getPageArray, getPageCount} from "./utils/pages";
 
 function App() {
 
@@ -15,22 +17,36 @@ function App() {
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.sort);
-    const [isLoading, setIsLoading] = useState(false);
+
+    const [totalPage, setTotalPage] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
 
 
-    async function fetchPost(){
-        setIsLoading(true);
-        setTimeout(async ()=>{
 
-            const posts = await PostService.getAll();
-            setPosts(posts.data);
-            setIsLoading(false);
 
-        },3000)
-    }
+
+    const [fetchPosts, isLoading, error] = useFetching ( async ()=> {
+
+        const response = await PostService.getAll(limit, page);
+
+        setPosts(response.data);
+
+        const totalCount = response.headers['x-total-count'];
+        setTotalPage(getPageCount(totalCount, limit))
+    })
+
+    let pageArray = getPageArray(totalPage)
+
+
+
+
+    console.log(totalPage);
+    console.log(pageArray);
+
 
     useEffect(()=>{
-        fetchPost()
+        fetchPosts()
     },[])
 
     const createPost = (newPost) => {
@@ -43,7 +59,6 @@ function App() {
 
     return (
         <div className="App">
-            <button onClick={fetchPost}>Get request</button>
             <MyButton style={{marginTop: 30}} onClick={()=>setModal(true)}>
                 Popup
             </MyButton>
@@ -51,9 +66,18 @@ function App() {
             <hr style={{margin: '20px'}}/>
             <PostFilter filter={filter} setFilter={setFilter}/>
             {
+                error && <h1>Error...</h1>
+            }
+            {
                 isLoading && <div className='content'><Loader/></div>
             }
             <PostList remove={deletePost} posts={sortedAndSearchedPosts}/>
+
+            {
+                pageArray.map(page=>
+                    <MyButton onClick={()=> setPage+1}>{page}</MyButton>
+                )
+            }
         </div>
     );
 }
